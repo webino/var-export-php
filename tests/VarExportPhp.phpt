@@ -17,8 +17,20 @@ use Tester\Environment;
 
 Environment::setup();
 
-$var = ['foo' => ['bar' => 'baz']];
 
-$code = var_export_php($var);
+$obj = new class()
+{
+    use VarExportPhpTrait;
 
-Assert::matchFile('var_export_php.expected', $code);
+    public function __invoke(): string
+    {
+        $var = ['foo' => ['bar' => 'baz']];
+        return $this->varExportPhp($var);
+    }
+};
+
+
+$code = $obj();
+
+
+Assert::matchFile('VarExportPhp.expected', $code);
